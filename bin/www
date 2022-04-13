@@ -1,19 +1,9 @@
-#!/usr/bin/env node 3339
+#!/usr/bin/env node
 
 const express = require('express')
 const cors = require('cors')
 
 const app = express();
-
-
-
-// const corsOptions ={
-//   origin:'*', 
-//   credentials:true,            //access-control-allow-credentials:true
-//   optionSuccessStatus:200,
-// }
-
-// app.use(cors(corsOptions)) // Use this after the variable declaration
 
 app.use(cors());
 app.options('*', cors());
@@ -25,7 +15,7 @@ const fs = require('fs');
 const { request } = require('http');
 
 
-var usersRouter = require('../routes/users');
+var usersRouter = require('../routes/usersRouter');
 var indexRouter = require('../routes/index');
 
 var getType = require('../models/model');
@@ -34,6 +24,7 @@ let dataPath = '../data.json'
 
 
 // app.use('/', indexRouter);
+app.use('/flowers', flowersRouter);
 app.use('/users', usersRouter);
 
 //Here we are configuring express to use body-parser as middle-ware.
@@ -46,17 +37,17 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/flowers', function (req, res) {
-  console.log(req.query.username);
-  console.log(getType(req.query.username));
-  // if the user is still exist "active..."
-  if (getType(req.query.username))
-  {
-    let file = require(dataPath)
-    console.log("send flowers")
-    res.json(file.flowers)
-  }
-});
+// app.get('/flowers', function (req, res) {
+//   console.log(req.query.username);
+//   console.log(getType(req.query.username));
+//   // if the user is still exist "active..."
+//   if (getType(req.query.username))
+//   {
+//     let file = require(dataPath)
+//     console.log("send flowers")
+//     res.json(file.flowers)
+//   }
+// });
 
 app.post('/login', (req, response) => {
   console.log(req.body);

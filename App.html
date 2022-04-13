@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <ul id="list" class="list-group">
+  </ul>
+
+  <script>
+    function getQueryParam(nameOfParam) {
+      // Further parsing:
+      queryString = window.location.search;
+      let params = new URLSearchParams(queryString);
+      let res = params.get(nameOfParam);
+      return res;
+    }
+
+    function show() {
+      var username = getQueryParam("username");
+
+      if (username) {
+        document.getElementById("mainNav").innerHTML +=
+        `<li><a href="#users" onclick="loadUsers()">Users</a></li>
+          <li><a href="#flowers" onclick="loadFlowers()">Flowers</a></li>`
+
+        document.getElementById("accountButton").innerHTML = 
+        `
+        <a href="#" data-toggle="modal" data-target="#modalLogoutForm" <span class="glyphicon glyphicon-user"> </span>Logout </a>
+        `
+      }
+      
+      hashState = window.location.hash;
+      switch (hashState) {
+        case "#flowers":
+          loadFlowers();
+          break;
+        case "#users":
+          loadUsers();
+          break;
+        case "#":
+          loadAbout();
+          break;
+        case "#contact":
+          loadContact()
+          break;
+        default:
+          loadAbout();
+          break;
+      }
+    }
+
+    function loadContact() {
+      var temp = "To the co - Royi: 051-9876543"
+      + "\n\n" +
+      "to the assistance Darmoni: 051-1234567";
+
+      document.getElementById("mainClassWin").textContent = temp;
+    }
+
+    function loadAbout() {
+      document.getElementById("mainClassWin").textContent = "Hello wellcome to our flowers online shop\nwe are the best!!!";
+    }
+
+    var username = getQueryParam("username");
+    function login() {
+
+      const data = {
+        username: document.getElementById('defaultForm-username').value,
+        pass: document.getElementById('defaultForm-pass').value
+      };
+
+      fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(data => {
+          if (data.ok) {
+            username = document.getElementById('defaultForm-username').value
+
+            var temp = window.location.hash
+
+            window.location.href = window.location.pathname +  "?username=" + `${username}` + window.location.hash   // ### 
+            show();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+
+    function logout() {
+      window.location.hash = "#";
+      window.location.href = window.location.pathname + window.location.hash
+
+      show();
+    }
+
+    async function loadUsers() {
+      
+      username = getQueryParam("username");
+
+      var res = '';
+
+      await fetch(`http://127.0.0.1:8080/users?username=${username}`)
+      // fetch(`http://127.0.0.1:8080/users?username=${username}`)
+        .then(response => response.json())
+        .then(data => res = data)        
+        .catch(response => res = response.json());
+        // .catch(err => console.error(err));
+      
+      // alert("opened users")
+
+      document.getElementById("mainClassWin").innerHTML =
+      `<div>
+        <button onClick="window.location.reload();">Refresh Page</button>
+      </div` +
+
+      '<div class="mainClass">' +
+      '<div class="container">' +
+      '<div class="row", id=rowClass>';
+    
+      res.users.forEach(user => {
+
+        // only the admin will be defined in user.pass ...
+        if (user.pass) {
+          // let currentUserImage = "http://127.0.0.1:8080/images/blank_username.png"
+          
+          document.getElementById("rowClass").innerHTML +=
+
+          '<div class="col-sm-4">' +
+          '<div class="panel panel-primary">' +
+          '<div class="panel-heading">username: ' + user.username + '</div>' +
+          '<div class="panel-body"><img src=http://127.0.0.1:8080/images/blank_username.png class="img-responsive" style="width:100%" alt="Image"></div>' +
+          '<div class="panel-footer">password: ' + user.pass + '</div>' +
+          `<label for="types">user type:</label>
+          <select name="types" id="types_${user.username}">
+            <option value="${user.type}">${user.type}</option>
+            <option value="admin">admin</option>
+            <option value="employee">employee</option>
+            <option value="client">client</option>
+          </select>
+          <br><br>
+          <input onclick="changeUserType('${user.username}')" type="submit" value="Update Me">` +
+          
+          `<div>
+            <button onClick="deleteUser({username: '${user.username}'});">Delete Me</button>
+          </div>` +          
+          '</div>' +
+          '</div>'
+        
+          document.getElementById("addUserWindow").innerHTML =
+          `
+          <p>Add a new user</p>
+          <form class="form-inline">
+            <input id="newUsernameInput" class="form-control" size="20" placeholder="username">
+            <input id="newpasswordInput" class="form-control" size="20" placeholder="password">
+            <br>
+            <br>
+            <label for="addUserTypes">user type:</label>
+            <select name="addUserTypes"  id="newUserTypeInput">
+              <option value="admin">admin</option>
+              <option value="employee">employee</option>
+              <option value="client">client</option>
+            </select>
+            <br><br>
+
+            <button onclick="addUser()" type="button" class="btn btn-danger">Confirm</button>
+          </form>
+          `
+
+        }
+
+        else {
+          // let currentUserImage = "http://127.0.0.1:8080/images/blank_username.png"
+
+          document.getElementById("rowClass").innerHTML +=
+
+          '<div class="col-sm-4">' +
+          '<div class="panel panel-primary">' +
+          '<div class="panel-heading">username: ' + user.username + '</div>' +
+          '<div class="panel-body"><img src=http://127.0.0.1:8080/images/blank_username.png class="img-responsive" style="width:100%" alt="Image"></div>' +
+          '<div class="panel-footer">type: ' + user.type + '</div>' +
+          `<div>
+            <button onClick="deleteUser({username: '${user.username}', type: '${user.type}'});">Delete Me</button>
+          </div>` +
+          '</div>' +
+          '</div>' 
+        }
+      });  
+    }
+
+    async function loadFlowers() {
+      // here we check if the user is logged in...
+      var username = getQueryParam("username");
+
+      var res = '';
+      await fetch(`http://127.0.0.1:8080/flowers?username=${username}`)
+        .then(response => response.json())
+        .then(data => res = data);
+
+      document.getElementById("mainClassWin").innerHTML =
+
+        '<div class="mainClass">' +
+        '<div class="container">' +
+        '<div class="row", id=rowClass>';
+
+      res.forEach(flower => {
+
+        document.getElementById("rowClass").innerHTML +=
+
+          '<div class="col-sm-4">' +
+          '<div class="panel panel-primary">' +
+          '<div class="panel-heading">' + flower.name + '</div>' +
+          '<div class="panel-body"><img src=http://127.0.0.1:8080/images/' + flower.img + ' class="img-responsive" style="width:100%" alt="Image"></div>' +
+          '<div class="panel-footer">' + flower.price + '$</div>' +
+          '</div>' +
+          '</div>'
+
+      });
+      document.getElementById("mainClassWin").innerHTML +=
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function deleteUser(user) {
+      username = getQueryParam("username");
+
+      var res = '';
+
+      fetch(`http://localhost:8080/users?username=${username}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+        .then(data => {
+          if (data.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+        window.location.reload();
+    }
+
+    function changeUserType(usernameToChange) {
+      username = getQueryParam("username");
+      var newUserType = document.getElementById(`types_${usernameToChange}`).value
+
+      fetch(`http://localhost:8080/users?username=${username}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username: usernameToChange, type: newUserType}),
+      })
+        .then(data => {
+          if (data.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+        window.location.reload();
+    }
+
+    function addUser() {
+      newUsername = document.getElementById("newUsernameInput").value;
+      newPassword = document.getElementById("newpasswordInput").value;
+      newUserType = document.getElementById("newUserTypeInput").value;
+
+      fetch(`http://localhost:8080/users?username=${username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username: newUsername, pass: newPassword, type: newUserType}),
+      })
+        .then(data => {
+          if (data.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+        window.location.reload();
+    }
+
+  </script>
+
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+    .jumbotron {
+      margin-bottom: 0;
+    }
+
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body onload="show()">
+  <div class="container text-center">
+    <img
+      src='http://127.0.0.1:8080/images/flower_logo.jpg'
+      height="210"></img>
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Logo</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="myNavbar">
+
+        <ul class="nav navbar-nav", id= "mainNav">
+          
+          <li><a href='#' onclick="loadAbout();">About</a></li>
+          <li><a href="#contact" onclick="loadContact();">Contact</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+                      
+              <li id="accountButton"><a href="#" data-toggle="modal" data-target="#modalLoginForm"><span class="glyphicon glyphicon-user"></span> Login </a></li>
+                      
+          <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mainClass" id="mainClassWin">
+  </div>
+
+  <footer class="container-fluid text-center" id="addUserWindow">
+    <p>Add a new user</p>
+    <form class="form-inline">
+      <input id="newUsernameInput" class="form-control" size="20" placeholder="username">
+      <input id="newpasswordInput" class="form-control" size="20" placeholder="password">
+      <br>
+      <br>
+      <label for="addUserTypes">user type:</label>
+      <select name="addUserTypes"  id="newUserTypeInput">
+        <option value="admin">admin</option>
+        <option value="employee">employee</option>
+        <option value="client">client</option>
+      </select>
+      <br><br>
+
+      <button onclick="addUser()" type="button" class="btn btn-danger">Confirm</button>
+    </form>
+  </footer>
+
+  <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <i class="fas fa-envelope prefix grey-text"></i>
+            <label data-error="wrong" data-success="right" for="defaultForm-username">Your username</label>
+            <input type="username" id="defaultForm-username" class="form-control validate">
+          </div>
+
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+            <input type="password" id="defaultForm-pass" class="form-control validate">
+          </div>
+        </div>
+
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-default" data-dismiss="modal" onclick="login()">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalLogoutForm" tabindex="-1" aria-labelledby="myModalLabel"
+    aria-hidden="true" onclick="logout();">    
+  </div>
+
+</body>
+
+</html>

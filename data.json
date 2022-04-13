@@ -1,0 +1,67 @@
+{
+	"flowers": [
+		{
+			"name": "kalanit",
+			"img": "kalanit.jpg",
+			"price": 50,
+			"rating": 1
+		},
+		{
+			"name": "narkis",
+			"img": "narkis.jpg",
+			"price": 36,
+			"rating": 2
+		},
+		{
+			"name": "rakefet",
+			"img": "rakefet.jpg",
+			"price": 58,
+			"rating": 4
+		},
+		{
+			"name": "shenharie",
+			"img": "shenharie.jpg",
+			"price": 87,
+			"rating": 5
+		},
+		{
+			"name": "vered",
+			"img": "vered.jpg",
+			"price": 99,
+			"rating": 2
+		}
+	],
+	"users": [
+		{
+			"username": "user",
+			"pass": "pass",
+			"type": "employee",
+			"image": "humanPhoto.png",
+			"active": true
+		},
+		{
+			"username": "admin",
+			"pass": "1234",
+			"type": "admin",
+			"active": true
+		},
+		{
+			"username": "007",
+			"pass": "007",
+			"type": "employee",
+			"active": true
+		},
+		{
+			"username": "client1",
+			"pass": "7410",
+			"type": "client",
+			"active": true
+		},
+		{
+			"username": "client2",
+			"pass": "8520",
+			"type": "client",
+			"active": true
+		}
+	]
+}

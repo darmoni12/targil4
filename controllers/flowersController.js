@@ -1,3 +1,4 @@
+const fs = require('fs');
 
 var utilsFunc = require('./utils');
 let dataPath = '../data.json'

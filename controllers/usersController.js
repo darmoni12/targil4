@@ -1,23 +1,10 @@
 
+const fs = require('fs');
 
 const User = require('../models/UserSchema');
 var utilsFunc = require('./utils');
 
 var dataPath = '../data.json'
-
-
-// function getType(username)
-// {
-//   let file = require(dataPath)
-//   // let type
-//   let users = file.users
-//   for (var i in users) {
-//     if (users[i].active && users[i].username == username) {
-//       return users[i].type
-//     }
-//   }
-//   return null
-// }
 
 function getUsers(req, res){
 
@@ -53,7 +40,6 @@ function getUsers(req, res){
 }
 
 function updateUser(req,res){
-  console.log("\t\t" + req.body)
   if(utilsFunc.getType(req.query.username) !== 'admin')
   {
       res.sendStatus(403)
@@ -62,12 +48,10 @@ function updateUser(req,res){
   let file = require(dataPath)
   file.users.forEach((user)=>{
 
-  console.log("\n\n" + user + "\n\n");
-  console.log("\n\n" + user.username + "\n\n");
-
-  console.log("\t\t\t\t" + req.body);
   if (user.username === req.body.username && user.active)
   {
+    // console.log("\n\n" + user + "\n\n");
+    // console.log("\n\n" + user.username + "\n\n");
     user.type = req.body.type
   }
 })

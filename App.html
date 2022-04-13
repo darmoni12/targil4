@@ -132,14 +132,14 @@
 
         // only the admin will be defined in user.pass ...
         if (user.pass) {
-          // let currentUserImage = "http://127.0.0.1:8080/images/blank_username.png"
+          let currentUserImage = user.image || "http://127.0.0.1:8080/images/blank_username.png"
           
           document.getElementById("rowClass").innerHTML +=
 
           '<div class="col-sm-4">' +
           '<div class="panel panel-primary">' +
           '<div class="panel-heading">username: ' + user.username + '</div>' +
-          '<div class="panel-body"><img src=http://127.0.0.1:8080/images/blank_username.png class="img-responsive" style="width:100%" alt="Image"></div>' +
+          `<div class="panel-body"><img src=${currentUserImage} class="img-responsive" style="width:100%" alt="Image"></div>` +
           '<div class="panel-footer">password: ' + user.pass + '</div>' +
           `<label for="types">user type:</label>
           <select name="types" id="types_${user.username}">
@@ -180,14 +180,14 @@
         }
 
         else {
-          // let currentUserImage = "http://127.0.0.1:8080/images/blank_username.png"
+          let currentUserImage = user.image || "http://127.0.0.1:8080/images/blank_username.png"
 
           document.getElementById("rowClass").innerHTML +=
 
           '<div class="col-sm-4">' +
           '<div class="panel panel-primary">' +
           '<div class="panel-heading">username: ' + user.username + '</div>' +
-          '<div class="panel-body"><img src=http://127.0.0.1:8080/images/blank_username.png class="img-responsive" style="width:100%" alt="Image"></div>' +
+          `<div class="panel-body"><img src=${currentUserImage} class="img-responsive" style="width:100%" alt="Image"></div>` +
           '<div class="panel-footer">type: ' + user.type + '</div>' +
           `<div>
             <button onClick="deleteUser({username: '${user.username}', type: '${user.type}'});">Delete Me</button>

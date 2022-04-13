@@ -13,6 +13,15 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const { request } = require('http');
 
+
+const mongoose = require('mongoose')
+
+const url  = "mongodb+srv://root:toor@cluster0.lvtkr.mongodb.net/myDataBase?retryWrites=true&w=majority"
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(url);
+
 var usersRouter = require('../routes/usersRouter');
 var flowersRouter = require('../routes/flowersRouter');
 var loginRouter = require('../routes/loginRouter');

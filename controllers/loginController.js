@@ -1,6 +1,4 @@
 
-const fs = require('fs');
-
 let dataPath = '../data.json'
 
 function login(req, response) {

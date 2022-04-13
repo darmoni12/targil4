@@ -1,4 +1,6 @@
-const fs = require('fs');
+
+
+const Flower = require('../models/FlowerSchema');
 
 var utilsFunc = require('./utils');
 let dataPath = '../data.json'

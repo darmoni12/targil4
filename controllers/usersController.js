@@ -1,14 +1,10 @@
 const User = require('../models/UserSchema');
 
-async function getType(username) {
-  const user = await User.findOne({ username: username }).exec();
-  if(user && user.active) return user.type
-  return null
-}
+var utilsFunc = require('./utils');
 
 async function getUsers(req, res) {
 
-  let type = await getType(req.query.username)
+  let type = await utilsFunc.getType(req.query.username)
   var all
 
   switch (type) {
@@ -33,7 +29,7 @@ async function getUsers(req, res) {
 
 async function updateUser(req, res) {
   console.log(req.body)
-  var type = await getType(req.query.username)
+  var type = await utilsFunc.getType(req.query.username)
   if (type !== 'admin') {
     res.sendStatus(403)
     return
@@ -49,7 +45,7 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   console.log(req.body);
-  var type = getType(req.query.username)
+  var type = await utilsFunc.getType(req.query.username)
   const filter = { username: req.body.username };
   const update = { active: false };
   const todelete = await User.findOne({ username: req.body.username }).exec();
@@ -65,7 +61,7 @@ async function deleteUser(req, res) {
 async function addUser(req, res) {
   console.log(req.body);
 
-  let type = getType(req.query.username)
+  let type = await utilsFunc.getType(req.query.username)
 
   if (type == 'admin' || (type == 'employee' && req.body.type == 'client')) {
 

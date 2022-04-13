@@ -1,6 +1,4 @@
 
-// let dataPath = '../data.json'
-
 const User = require('../models/UserSchema');
 
 async function login(req, response) {

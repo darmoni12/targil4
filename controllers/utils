@@ -1,17 +1,9 @@
 
+var User = require('../models/UserSchema');
 
-let dataPath = '../data.json'
-
-function getType(username)
-{
-  let file = require(dataPath)
-  // let type
-  let users = file.users
-  for (var i in users) {
-    if (users[i].active && users[i].username == username) {
-      return users[i].type
-    }
-  }
+async function getType(username) {
+  const user = await User.findOne({ username: username }).exec();
+  if(user && user.active) return user.type
   return null
 }
 

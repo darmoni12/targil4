@@ -1,28 +1,29 @@
 
 
 const User = require('../models/UserSchema');
+var utilsFunc = require('./utils');
 
-let dataPath = '../data.json'
+var dataPath = '../data.json'
 
 
-function getType(username)
-{
-  let file = require(dataPath)
-  // let type
-  let users = file.users
-  for (var i in users) {
-    if (users[i].active && users[i].username == username) {
-      return users[i].type
-    }
-  }
-  return null
-}
+// function getType(username)
+// {
+//   let file = require(dataPath)
+//   // let type
+//   let users = file.users
+//   for (var i in users) {
+//     if (users[i].active && users[i].username == username) {
+//       return users[i].type
+//     }
+//   }
+//   return null
+// }
 
 function getUsers(req, res){
 
   let file = require(dataPath)
   let users = file.users
-  let type = getType(req.query.username)
+  let type = utilsFunc.getType(req.query.username)
   let temp=[]
   switch (type) {
     case ('admin'):
@@ -52,15 +53,19 @@ function getUsers(req, res){
 }
 
 function updateUser(req,res){
-  console.log(req.body)
-  if(getType(req.query.username) !== 'admin')
+  console.log("\t\t" + req.body)
+  if(utilsFunc.getType(req.query.username) !== 'admin')
   {
       res.sendStatus(403)
       return
   }
   let file = require(dataPath)
   file.users.forEach((user)=>{
-  console.log(req.body);
+
+  console.log("\n\n" + user + "\n\n");
+  console.log("\n\n" + user.username + "\n\n");
+
+  console.log("\t\t\t\t" + req.body);
   if (user.username === req.body.username && user.active)
   {
     user.type = req.body.type
@@ -71,7 +76,7 @@ function updateUser(req,res){
 
 function deleteUser(req, res) {
   console.log(req.body);
-  var type = getType(req.query.username)
+  var type = utilsFunc.getType(req.query.username)
   if(type !== 'admin' && type !== 'employee')
   {
       res.sendStatus(403)
@@ -89,7 +94,7 @@ function deleteUser(req, res) {
 
 function addUser(req, res) {
   console.log(req.body);
-  let type = getType(req.query.username)
+  let type = utilsFunc.getType(req.query.username)
   if(!req.body.username)
   {
     res.sendStatus(403)
